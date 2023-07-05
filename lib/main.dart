@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/utils/colors.dart';
 
 void main() async {
@@ -19,16 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Instagram Clone',
       theme: ThemeData.dark()
           .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-      home: SafeArea(
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [],
-          ),
-        ),
-      ),
+      home: const LoginScreen(),
     );
   }
 }
