@@ -1,4 +1,8 @@
+import "dart:typed_data";
 import "package:flutter/material.dart";
+import "package:image_picker/image_picker.dart";
+import "package:instagram/resources/auth_method.dart";
+import "package:instagram/utils/utils.dart";
 import "package:instagram/widgets/text_field_input.dart";
 import 'package:flutter_svg/svg.dart';
 
@@ -14,6 +18,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  Uint8List? image;
 
   @override
   void dispose() {
@@ -22,6 +27,13 @@ class _SignupScreenState extends State<SignupScreen> {
     _bioController.dispose();
     _usernameController.dispose();
     super.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      image = im;
+    });
   }
 
   @override
@@ -45,15 +57,18 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 15,
               ),
               Stack(children: [
-                const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1682687218982-6c508299e107?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')),
+                image == null
+                    ? const CircleAvatar(
+                        radius: 64,
+                        backgroundImage: NetworkImage(
+                            'https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp'))
+                    : CircleAvatar(
+                        radius: 64, backgroundImage: MemoryImage(image!)),
                 Positioned(
                   bottom: -10,
                   right: -10,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: selectImage,
                     icon: const Icon(Icons.add_a_photo),
                   ),
                 )
@@ -94,7 +109,16 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 24,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () async {
+                  String res = await AuthMethods().signUpUser(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                      username: _usernameController.text,
+                      profileImage: image!,
+                      bio: _bioController.text);
+
+                  print(res);
+                },
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
