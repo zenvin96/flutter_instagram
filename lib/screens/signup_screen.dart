@@ -5,6 +5,7 @@ import "package:instagram/resources/auth_method.dart";
 import "package:instagram/utils/utils.dart";
 import "package:instagram/widgets/text_field_input.dart";
 import 'package:flutter_svg/svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -103,21 +104,36 @@ class _SignupScreenState extends State<SignupScreen> {
                 textEditingController: _bioController,
                 hintText: 'Enter Your Bio',
                 keyboardType: TextInputType.text,
-                obscureText: true,
               ),
               const SizedBox(
                 height: 24,
               ),
               InkWell(
                 onTap: () async {
+                  final loader = context;
+                  loader.loaderOverlay.show();
+
                   String res = await AuthMethods().signUpUser(
                       email: _emailController.text,
                       password: _passwordController.text,
                       username: _usernameController.text,
                       profileImage: image!,
                       bio: _bioController.text);
+                  loader.loaderOverlay.hide();
 
-                  print(res);
+                  final snackBar = SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text(
+                      res,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
                 child: Container(
                   width: double.infinity,
