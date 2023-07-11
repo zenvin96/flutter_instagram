@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:instagram/resources/auth_method.dart";
 import "package:instagram/widgets/text_field_input.dart";
 import 'package:flutter_svg/svg.dart';
 
@@ -18,6 +19,26 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void loginUser(context) async {
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+
+    String res =
+        await AuthMethods().loginUser(email: email, password: password);
+
+    if (res == 'success') {
+      // Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(res),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -57,7 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () async {
+                  loginUser(context);
+                },
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
