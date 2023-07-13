@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:instagram/resources/auth_method.dart";
+import "package:instagram/utils/colors.dart";
 import "package:instagram/widgets/text_field_input.dart";
 import 'package:flutter_svg/svg.dart';
 
@@ -14,6 +15,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool _isLoading = false;
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -22,6 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginUser(context) async {
+    setState(() {
+      _isLoading = true;
+    });
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
@@ -39,6 +45,10 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -90,7 +100,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       color: Colors.blue),
-                  child: const Text('Login'),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 17,
+                          width: 17,
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: primaryColor,
+                          )),
+                        )
+                      : const Text('Login'),
                 ),
               ),
               const SizedBox(
