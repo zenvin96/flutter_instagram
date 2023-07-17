@@ -2,6 +2,7 @@ import "dart:typed_data";
 import "package:flutter/material.dart";
 import "package:image_picker/image_picker.dart";
 import "package:instagram/resources/auth_method.dart";
+import "package:instagram/screens/login_screen.dart";
 import "package:instagram/utils/utils.dart";
 import "package:instagram/widgets/text_field_input.dart";
 import 'package:flutter_svg/svg.dart';
@@ -35,6 +36,11 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       image = im;
     });
+  }
+
+  void gotoLogin() {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -159,6 +165,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: const Text("Dont have an account?"),
                   ),
                   GestureDetector(
+                    onTap: () {
+                      gotoLogin();
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(

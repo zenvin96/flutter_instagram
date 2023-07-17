@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:instagram/resources/auth_method.dart";
+import "package:instagram/screens/home_screen.dart";
+import "package:instagram/screens/signup_screen.dart";
 import "package:instagram/utils/colors.dart";
 import "package:instagram/widgets/text_field_input.dart";
 import 'package:flutter_svg/svg.dart';
@@ -24,6 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void gotoSignup() {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const SignupScreen()));
+  }
+
   void loginUser(context) async {
     setState(() {
       _isLoading = true;
@@ -35,7 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await AuthMethods().loginUser(email: email, password: password);
 
     if (res == 'success') {
-      // Navigator.pushReplacementNamed(context, '/home');
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()));
     } else {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -124,6 +132,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text("Dont have an account?"),
                   ),
                   GestureDetector(
+                    onTap: () {
+                      gotoSignup();
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(
