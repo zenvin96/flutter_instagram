@@ -1,5 +1,5 @@
 import "dart:typed_data";
-
+import 'package:instagram/models/user.dart' as UserModel;
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:instagram/resources/storage_method.dart";
@@ -23,14 +23,18 @@ class AuthMethods {
       String photoUrl = await StorageMethods().uploadImageToStorage(
           'profileImages', profileImage, false, cred.user!.uid);
 
-      await _storage.collection('users').doc(cred.user!.uid).set({
-        'username': username,
-        'email': email,
-        'bio': bio,
-        'profileImage': photoUrl,
-        'followers': [],
-        'following': [],
-      });
+      // create user model
+      UserModel.User user = UserModel.User(
+        email: email,
+        username: username,
+        bio: bio,
+        profileImage: photoUrl,
+        uid: cred.user!.uid,
+        followers: [],
+        following: [],
+      );
+
+      await _storage.collection('users').doc(cred.user!.uid).set(user.toJson());
       res = 'success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
