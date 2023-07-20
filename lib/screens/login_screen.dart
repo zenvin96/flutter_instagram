@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:instagram/resources/auth_method.dart";
-import "package:instagram/screens/home_screen.dart";
+import "package:instagram/responsive/mobile_screen.dart";
+import "package:instagram/responsive/responsive_layout_screen.dart";
+import "package:instagram/responsive/web_screen.dart";
 import "package:instagram/screens/signup_screen.dart";
 import "package:instagram/utils/colors.dart";
 import "package:instagram/widgets/text_field_input.dart";
@@ -42,8 +44,12 @@ class _LoginScreenState extends State<LoginScreen> {
         await AuthMethods().loginUser(email: email, password: password);
 
     if (res == 'success') {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return const ResponsiveLayout(
+            webScreenLayout: WebScreenLayout(),
+            mobileScreenLayout: MobileScreenLayout());
+      }));
     } else {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
