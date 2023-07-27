@@ -16,7 +16,6 @@ class User {
 
   static User fromJson(DocumentSnapshot json) {
     var snapshot = json.data() as Map<String, dynamic>;
-    print(snapshot);
     return User(
       email: snapshot['email'],
       username: snapshot['username'],
