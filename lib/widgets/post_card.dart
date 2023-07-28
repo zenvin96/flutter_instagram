@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:instagram/utils/colors.dart";
+import "package:intl/intl.dart";
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -29,16 +30,16 @@ class _PostCardState extends State<PostCard> {
                   radius: 16,
                   backgroundImage: NetworkImage(widget.snap['profImage']),
                 ),
-                const Expanded(
+                Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 12),
+                    padding: const EdgeInsets.only(left: 12),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'username',
-                          style: TextStyle(
+                          widget.snap['username'],
+                          style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -81,8 +82,9 @@ class _PostCardState extends State<PostCard> {
             height: MediaQuery.of(context).size.height * 0.4,
             width: double.infinity,
             child: Image.network(
-                fit: BoxFit.cover,
-                'https://images.unsplash.com/photo-1682687220199-d0124f48f95b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'),
+              widget.snap['postUrl'],
+              fit: BoxFit.cover,
+            ),
           ),
           Row(
             children: [
@@ -124,7 +126,7 @@ class _PostCardState extends State<PostCard> {
                         .textTheme
                         .titleSmall!
                         .copyWith(fontWeight: FontWeight.w800),
-                    child: Text('1231 likes',
+                    child: Text('${widget.snap['likes'].length} likes',
                         style: Theme.of(context).textTheme.bodyMedium),
                   ),
                   Container(
@@ -137,15 +139,14 @@ class _PostCardState extends State<PostCard> {
                         style: const TextStyle(color: primaryColor),
                         children: [
                           TextSpan(
-                              text: 'username',
+                              text: widget.snap['username'],
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(fontWeight: FontWeight.w800)),
                           const TextSpan(text: ' '),
                           TextSpan(
-                              text:
-                                  'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                              text: widget.snap['description'],
                               style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),
@@ -163,9 +164,10 @@ class _PostCardState extends State<PostCard> {
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: const Text(
-                      '22/12/2023',
-                      style: TextStyle(
+                    child: Text(
+                      DateFormat.yMMMd()
+                          .format(widget.snap['datePublished'].toDate()),
+                      style: const TextStyle(
                         fontSize: 14,
                         color: secondaryColor,
                       ),
